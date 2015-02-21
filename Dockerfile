@@ -20,9 +20,8 @@ RUN apt-get update -q
 RUN apt-get install -qy python python-cheetah ca-certificates wget unrar
 
 # Install SickRage 0.2.1 (2014-10-22)
-RUN mkdir /opt/sickrage
-RUN wget https://github.com/SICKRAGETV/SickRage/archive/release_4.0.9.tar.gz -O /tmp/release_4.0.9.tar.gz
-RUN tar -C /opt/sickrage -xvf /tmp/release_4.0.9.tar.gz --strip-components 1
+RUN apt-get install -qy git
+RUN git clone https://github.com/SiCKRAGETV/SickRage.git /opt/sickrage
 RUN chown nobody:users /opt/sickrage
 
 EXPOSE 8081
@@ -35,11 +34,6 @@ VOLUME /downloads
 
 # TV directory
 VOLUME /tv
-
-# Add edge.sh to execute during container startup
-RUN mkdir -p /etc/my_init.d
-ADD edge.sh /etc/my_init.d/edge.sh
-RUN chmod +x /etc/my_init.d/edge.sh
 
 # Add SickRage to runit
 RUN mkdir /etc/service/sickrage
