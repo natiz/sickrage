@@ -21,8 +21,7 @@ RUN apt-get install -qy python python-cheetah ca-certificates wget unrar
 
 # Install SickRage (latest)
 RUN apt-get install -qy git
-RUN git clone https://github.com/SiCKRAGETV/SickRage.git /opt
-RUN mv /opt/SickRage /opt/sickrage
+RUN git clone https://github.com/SickRage/SickRage.git /opt/sickrage
 RUN chown nobody:users /opt/sickrage
 RUN chmod -R +rw /opt/sickrage
 
