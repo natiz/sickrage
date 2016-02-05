@@ -12,17 +12,15 @@ CMD ["/sbin/my_init"]
 RUN usermod -u 99 nobody
 RUN usermod -g 100 nobody
 
-RUN apk -U upgrade && \
-    apk -U add \
-        ca-certificates \
-        py-pip ca-certificates git python py-libxml2 py-lxml \
-        make gcc g++ python-dev openssl-dev libffi-dev unrar \
-        && \
-    pip --no-cache-dir install pyopenssl cheetah requirements && \
-    git clone --depth 1 https://github.com/SickRage/SickRage.git /opt/sickrage && \
-    apk del make gcc g++ python-dev && \
-    rm -rf /tmp && \
-    rm -rf /var/cache/apk/*
+RUN add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse" && \
+    add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse" && \
+    apt-get update -q
+
+# Install Dependencies
+RUN apt-get install -qy libxslt1-dev libxslt1.1 libxml2-dev libxml2 libssl-dev libffi-dev python-pip python-dev libssl-dev git
+
+RUN pip install pyopenssl==0.13.1
+RUN git clone https://github.com/SickRage/SickRage.git /opt/sickrage
 
 RUN chown nobody:users /opt/sickrage
 RUN chmod -R +rw /opt/sickrage
