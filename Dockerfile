@@ -17,9 +17,10 @@ RUN add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe
     apt-get update -q
 
 # Install Dependencies
-RUN apt-get install -qy libxslt1-dev libxslt1.1 libxml2-dev libxml2 libssl-dev libffi-dev python-pip python-dev libssl-dev git
+RUN apt-get install -qy python-pip python-dev git-core libssl-dev libxslt1-dev libxslt1.1 libxml2-dev libxml2 libssl-dev libffi-dev
 
-RUN pip install pyopenssl==0.13.1
+RUN pip install pyopenssl
+
 RUN git clone https://github.com/SickRage/SickRage.git /opt/sickrage
 
 RUN chown nobody:users /opt/sickrage
