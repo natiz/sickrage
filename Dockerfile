@@ -12,16 +12,18 @@ CMD ["/sbin/my_init"]
 RUN usermod -u 99 nobody
 RUN usermod -g 100 nobody
 
-RUN add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
-RUN add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
-RUN apt-get update -q
+RUN apk -U upgrade && \
+    apk -U add \
+        ca-certificates \
+        py-pip ca-certificates git python py-libxml2 py-lxml \
+        make gcc g++ python-dev openssl-dev libffi-dev unrar \
+        && \
+    pip --no-cache-dir install pyopenssl cheetah requirements && \
+    git clone --depth 1 https://github.com/SickRage/SickRage.git /opt/sickrage && \
+    apk del make gcc g++ python-dev && \
+    rm -rf /tmp && \
+    rm -rf /var/cache/apk/*
 
-# Install Dependencies
-RUN apt-get install -qy python python-cheetah ca-certificates wget unrar
-
-# Install SickRage (latest)
-RUN apt-get install -qy git
-RUN git clone https://github.com/SickRage/SickRage.git /opt/sickrage
 RUN chown nobody:users /opt/sickrage
 RUN chmod -R +rw /opt/sickrage
 
@@ -35,14 +37,8 @@ rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 
 EXPOSE 8081
 
-# SickRage Configuration
-VOLUME /config
-
-# Downloads directory
-VOLUME /downloads
-
-# TV directory
-VOLUME /tv
+# Directories
+VOLUME ["/config", "/downloads", "/tv"]
 
 # Add edge.sh to execute during container startup
 RUN mkdir -p /etc/my_init.d
