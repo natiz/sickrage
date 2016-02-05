@@ -14,7 +14,8 @@ RUN usermod -g 100 nobody
 
 RUN add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse" && \
     add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse" && \
-    apt-get update -q
+    apt-get update -q && \
+    apt-get upgrade -y
 
 # Install Dependencies
 RUN apt-get install -qy python-pip python-dev git-core libssl-dev libxslt1-dev libxslt1.1 libxml2-dev libxml2 libssl-dev libffi-dev
