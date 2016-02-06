@@ -17,9 +17,11 @@ add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates univ
 apt-get update -q && \
 
 # Install Dependencies
-apt-get install -qy python python-cheetah ca-certificates wget unrar unzip && \
+apt-get install -qy python python-cheetah python-pip ca-certificates wget unrar unzip && \
 
-# Install SickRage 4.2.0.4 (2015-11-22)
+pip install pyopenssl==0.13.1
+
+# Install SickRage
 git clone https://github.com/SickRage/SickRage.git /opt/sickrage && \
 chown -R nobody:users /opt/sickrage && \
 
