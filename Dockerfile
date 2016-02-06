@@ -9,26 +9,22 @@ ENV HOME /root
 CMD ["/sbin/my_init"]
 
 # Fix a Debianism of the nobody's uid being 65534
-RUN usermod -u 99 nobody
-RUN usermod -g 100 nobody
+RUN usermod -u 99 nobody && \
+usermod -g 100 nobody && \
 
-RUN add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse" && \
-    add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse" && \
-    apt-get update -q && \
-    apt-get upgrade -y
+add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse" && \
+add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse" && \
+apt-get update -q && \
 
 # Install Dependencies
-RUN apt-get install -qy python-pip python-dev git-core libssl-dev libxslt1-dev libxslt1.1 libxml2-dev libxml2 libssl-dev libffi-dev
+apt-get install -qy python python-cheetah ca-certificates wget unrar unzip && \
 
-RUN pip install pyopenssl
-
-RUN git clone https://github.com/SickRage/SickRage.git /opt/sickrage
-
-RUN chown nobody:users /opt/sickrage
-RUN chmod -R +rw /opt/sickrage
+# Install SickRage 4.2.0.4 (2015-11-22)
+git clone https://github.com/SickRage/SickRage.git /opt/sickrage && \
+chown -R nobody:users /opt/sickrage && \
 
 # clean up
-RUN apt-get clean && \
+apt-get clean && \
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 /usr/share/man /usr/share/groff /usr/share/info \
 /usr/share/lintian /usr/share/linda /var/cache/man && \
